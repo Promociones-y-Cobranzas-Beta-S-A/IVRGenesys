@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Usuarios</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <style>
+      .crud-container {
+        margin-top: 50px;
+      }
+
+      .table th,
+      .table td {
+        text-align: center;
+        vertical-align: middle;
+      }
+
+      .form-control {
+        width: 80%;
+        margin: 0 auto;
+      }
+
+      .alert {
+        margin-top: 15px;
+      }
+    </style>
+    <style>
+      .crud-container {
+        margin-top: 50px;
+      }
+
+      #preview-container {
+        margin-top: 15px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: left;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+
+      .pagination {
+        justify-content: center;
+      }
+
+      /* Estilo de la tabla */
+      .table-dark th {
+        background-color: #343a40;
+        color: white;
+      }
+
+      .table td {
+        background-color: white;
+        color: #343a40;
+      }
+
+      .table-bordered th,
+      .table-bordered td {
+        border: 1px solid #ddd;
+      }
+
+      /* Botón de subir archivo en verde */
+      .btn-subir {
+        background-color: #28a745;
+        /* Verde */
+        color: white;
+        font-size: 16px;
+      }
+
+      .btn-subir:hover {
+        background-color: #218838;
+        /* Verde oscuro al pasar el mouse */
+      }
+
+      /* Estilo del buscador con borde verde */
+      #buscador {
+        border: 2px solid #28a745;
+      }
+
+      #buscador:focus {
+        border-color: #218838;
+      }
+
+      /* Estilo de la alerta */
+      .alert {
+        font-size: 14px;
+      }
+
+      /* Estilo del spinner */
+      #spinner {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container crud-container">
+      <h2 class="text-center mb-4">Gestión de Usuarios</h2>
+
+      <!-- Mensajes de éxito o error -->
+      <div id="mensaje"></div>
+
+      <div class="card">
+        <div class="card-body">
+          <!-- Tabla CRUD -->
+          <table class="table table-bordered">
+            <thead class="thead-dark">
+              <tr>
+                <th colspan="2">Consultar Usuario</th>
+                <th colspan="2">Crear Usuario</th>
+                <th colspan="2">Actualizar Usuario</th>
+                <th colspan="2">Eliminar Usuario</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Fila para Consultar Usuario -->
+              <tr>
+                <td colspan="2">
+                  <form id="form-consultar-usuario">
+                    <div class="form-group">
+                      <label for="cedula-consultar">Cédula</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="cedula-consultar"
+                        placeholder="Ingrese cédula"
+                        required
+                      />
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                      Consultar
+                    </button>
+                  </form>
+                  <div id="resultado-consulta" class="mt-3"></div>
+                </td>
+
+                <!-- Fila para Crear Usuario -->
+                <td colspan="2">
+                  <form id="form-crear-usuario">
+                    <div class="form-group">
+                      <label for="identificacion-crear">Identificación</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="identificacion-crear"
+                        placeholder="Ingrese identificación"
+                        required
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="nombre_titular-crear">Nombre Titular</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="nombre_titular-crear"
+                        placeholder="Ingrese nombre del titular"
+                        required
+                      />
+                    </div>
+                    <button type="submit" class="btn btn-success">
+                      Crear Usuario
+                    </button>
+                  </form>
+                </td>
+
+                <!-- Fila para Actualizar Usuario -->
+                <td colspan="2">
+                  <form id="form-actualizar-usuario">
+                    <div class="form-group">
+                      <label for="identificacion-actualizar"
+                        >Identificación</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="identificacion-actualizar"
+                        placeholder="Ingrese identificación"
+                        required
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="nombre_titular-actualizar"
+                        >Nuevo Nombre Titular</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="nombre_titular-actualizar"
+                        placeholder="Ingrese nuevo nombre"
+                        required
+                      />
+                    </div>
+                    <button type="submit" class="btn btn-warning">
+                      Actualizar Usuario
+                    </button>
+                  </form>
+                </td>
+
+                <!-- Fila para Eliminar Usuario -->
+                <td colspan="2">
+                  <form id="form-eliminar-usuario">
+                    <div class="form-group">
+                      <label for="identificacion-eliminar"
+                        >Identificación</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="identificacion-eliminar"
+                        placeholder="Ingrese identificación"
+                        required
+                      />
+                    </div>
+                    <button type="submit" class="btn btn-danger">
+                      Eliminar Usuario
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <style>
+        /* Estilo para el overlay que evitará la interacción del usuario */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            z-index: 9998;
+            display: none;
+        }
+        #spinner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container crud-container mt-5">
+    <h2 class="text-center mb-4">Subir Archivo</h2>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form id="form-subir-archivo" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="archivo-subir">Seleccione un archivo (CSV)</label>
+                    <input type="file" class="form-control" id="archivo-subir" accept=".csv, .txt, .json, .db" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Subir Archivo</button>
+            </form>
+            <div id="search-container" class="mt-3">
+                <input type="text" id="buscador" class="form-control" placeholder="Buscar en la tabla..." disabled>
+            </div>
+            <div id="preview-container" class="mt-3">
+                <p class="text-muted">Aquí aparecerá la vista previa del archivo</p>
+            </div>
+            <nav>
+                <ul class="pagination mt-3"></ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Overlay y Spinner de carga -->
+<div id="overlay"></div>
+<div id="spinner" style="display: none;">
+    <div class="spinner-border text-success" role="status">
+        <span class="sr-only">Cargando...</span>
+    </div>
+</div>
+
+<script>
+    const filasPorPagina = 20; // Cantidad de filas por página
+    let contenidoGlobal = []; // Contenido original dividido en filas
+    let contenidoFiltrado = []; // Contenido filtrado
+    let paginaActual = 1; // Página actual
+    let tiempoBusqueda; // Variable para debounce
+
+    $("#form-subir-archivo").on("submit", function (event) {
+        event.preventDefault();
+        const archivo = $("#archivo-subir")[0].files[0];
+        const previewContainer = $("#preview-container");
+        const fileType = archivo.name.split(".").pop().toLowerCase();
+
+        if (!archivo) {
+            previewContainer.html('<div class="alert alert-warning">Seleccione un archivo</div>');
+            return;
+        }
+
+        // Mostrar overlay y spinner
+        $("#overlay").show();
+        $("#spinner").show();
+
+        const formData = new FormData();
+        formData.append('archivo', archivo);
+
+        $.ajax({
+            url: '/subir_archivo',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                alert(response.mensaje);
+                if (fileType === "csv") {
+                    procesarCSV(archivo);
+                } else {
+                    previewContainer.html('<div class="alert alert-info">Solo se admite paginación para archivos CSV</div>');
+                    $("#overlay").hide();
+                    $("#spinner").hide();
+                }
+            },
+            error: function(xhr) {
+                alert(xhr.responseJSON.error);
+                $("#overlay").hide();
+                $("#spinner").hide();
+            }
+        });
+    });
+
+    function procesarCSV(archivo) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            const contenido = e.target.result;
+            contenidoGlobal = contenido
+                .trim()
+                .split("\n")
+                .map((fila) => fila.split(",").map((col) => col.toLowerCase())); // Preprocesar a minúsculas
+            contenidoFiltrado = [...contenidoGlobal];
+            $("#buscador").prop("disabled", false); // Activar el buscador
+            mostrarPagina(1);
+
+            // Ocultar overlay y spinner una vez que se carga el archivo
+            $("#overlay").hide();
+            $("#spinner").hide();
+        };
+
+        reader.onerror = function () {
+            $("#preview-container").html('<div class="alert alert-danger">Error al cargar el archivo</div>');
+
+            // Ocultar overlay y spinner en caso de error
+            $("#overlay").hide();
+            $("#spinner").hide();
+        };
+
+        reader.readAsText(archivo);
+    }
+
+    // Mostrar una página específica
+    function mostrarPagina(pagina) {
+        const previewContainer = $("#preview-container");
+        const paginationContainer = $(".pagination");
+
+        paginaActual = pagina;
+        const inicio = (pagina - 1) * filasPorPagina;
+        const fin = inicio + filasPorPagina;
+        const filasPagina = contenidoFiltrado.slice(inicio, fin);
+
+        // Generar tabla
+        let tablaHTML = "<table class='table table-bordered'><thead><tr>";
+        contenidoFiltrado[0].forEach((col) => {
+            tablaHTML += `<th>${col}</th>`;
+        });
+        tablaHTML += "</tr></thead><tbody>";
+
+        filasPagina.forEach((fila) => {
+            tablaHTML += "<tr>";
+            fila.forEach((col) => {
+                tablaHTML += `<td>${col}</td>`;
+            });
+            tablaHTML += "</tr>";
+        });
+
+        tablaHTML += "</tbody></table>";
+        previewContainer.html(tablaHTML);
+
+        // Actualizar paginación
+        const totalPaginas = Math.ceil(contenidoFiltrado.length / filasPorPagina);
+        generarPaginacion(totalPaginas);
+    }
+
+    // Generar la paginación con límites
+    function generarPaginacion(totalPaginas) {
+        const paginationContainer = $(".pagination");
+        const limiteBotones = 4;
+        let inicio = Math.max(1, paginaActual - Math.floor(limiteBotones / 2));
+        let fin = Math.min(totalPaginas, inicio + limiteBotones - 1);
+
+        if (fin - inicio < limiteBotones - 1) {
+            inicio = Math.max(1, fin - limiteBotones + 1);
+        }
+
+        let paginacionHTML = `
+        <li class="page-item ${paginaActual === 1 ? "disabled" : ""}">
+            <a class="page-link" href="#" data-pagina="${paginaActual - 1}">Anterior</a>
+        </li>`;
+
+        for (let i = inicio; i <= fin; i++) {
+            paginacionHTML += `
+            <li class="page-item ${i === paginaActual ? "active" : ""}">
+                <a class="page-link" href="#" data-pagina="${i}">${i}</a>
+            </li>`;
+        }
+
+        paginacionHTML += `
+        <li class="page-item ${paginaActual === totalPaginas ? "disabled" : ""}">
+            <a class="page-link" href="#" data-pagina="${paginaActual + 1}">Siguiente</a>
+        </li>`;
+
+        paginationContainer.html(paginacionHTML);
+
+        $(".page-link").on("click", function (e) {
+            e.preventDefault();
+            const nuevaPagina = parseInt($(this).data("pagina"));
+            if (nuevaPagina > 0 && nuevaPagina <= totalPaginas) {
+                mostrarPagina(nuevaPagina);
+            }
+        });
+    }
+
+    // Función debounce
+    function debounce(func, delay) {
+        clearTimeout(tiempoBusqueda);
+        tiempoBusqueda = setTimeout(func, delay);
+    }
+
+    // Buscar en la tabla con debounce
+    $("#buscador").on("input", function () {
+        const palabraClave = $(this).val().toLowerCase();
+
+        debounce(() => {
+            contenidoFiltrado = contenidoGlobal.filter((fila) =>
+                fila.some((col) => col.includes(palabraClave))
+            );
+
+            mostrarPagina(1); // Reiniciar a la primera página
+        }, 300); // 300ms de retraso
+    });
+</script>
+      
+      <script>
+        // Consultar usuario
+        $("#form-consultar-usuario").on("submit", function (event) {
+          event.preventDefault();
+          const cedula = $("#cedula-consultar").val();
+
+          $.ajax({
+            url: `/consultar_cedula?cedula=${cedula}`,
+            type: "GET",
+            success: function (response) {
+              $("#resultado-consulta").html(
+                `<p>Identificación: ${response.identificacion}</p>
+                 <p>Nombre: ${response.nombre_titular}</p>`
+              );
+            },
+            error: function (error) {
+              const errorMessage = error.responseJSON
+                ? error.responseJSON.error
+                : "Error al consultar el usuario";
+              $("#resultado-consulta").html(
+                '<div class="alert alert-danger">' + errorMessage + "</div>"
+              );
+            },
+          });
+        });
+
+        // Crear usuario
+        $("#form-crear-usuario").on("submit", function (event) {
+          event.preventDefault();
+          const identificacion = $("#identificacion-crear").val();
+          const nombre_titular = $("#nombre_titular-crear").val();
+
+          $.ajax({
+            url: `/crear_usuario`,
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ identificacion, nombre_titular }),
+            success: function (response) {
+              $("#mensaje").html(
+                '<div class="alert alert-success">Usuario creado exitosamente</div>'
+              );
+              $("#form-crear-usuario")[0].reset();
+            },
+            error: function (error) {
+              const errorMessage = error.responseJSON
+                ? error.responseJSON.error
+                : "Error al crear el usuario";
+              $("#mensaje").html(
+                '<div class="alert alert-danger">' + errorMessage + "</div>"
+              );
+            },
+          });
+        });
+
+        // Actualizar usuario
+        $("#form-actualizar-usuario").on("submit", function (event) {
+          event.preventDefault();
+          const identificacion = $("#identificacion-actualizar").val();
+          const nombre_titular = $("#nombre_titular-actualizar").val();
+
+          $.ajax({
+            url: `/actualizar_usuario/${identificacion}`,
+            type: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify({ nombre_titular }),
+            success: function (response) {
+              $("#mensaje").html(
+                '<div class="alert alert-success">Usuario actualizado exitosamente</div>'
+              );
+              $("#form-actualizar-usuario")[0].reset();
+            },
+            error: function (error) {
+              const errorMessage = error.responseJSON
+                ? error.responseJSON.error
+                : "Error al actualizar el usuario";
+              $("#mensaje").html(
+                '<div class="alert alert-danger">' + errorMessage + "</div>"
+              );
+            },
+          });
+        });
+
+        // Eliminar usuario
+        $("#form-eliminar-usuario").on("submit", function (event) {
+          event.preventDefault();
+          const identificacion = $("#identificacion-eliminar").val();
+
+          if (confirm("¿Está seguro de que desea eliminar este usuario?")) {
+            $.ajax({
+              url: `/eliminar_usuario/${identificacion}`,
+              type: "DELETE",
+              success: function (response) {
+                $("#mensaje").html(
+                  '<div class="alert alert-success">Usuario eliminado exitosamente</div>'
+                );
+                $("#form-eliminar-usuario")[0].reset();
+              },
+              error: function (error) {
+                const errorMessage = error.responseJSON
+                  ? error.responseJSON.error
+                  : "Error al eliminar el usuario";
+                $("#mensaje").html(
+                  '<div class="alert alert-danger">' + errorMessage + "</div>"
+                );
+              },
+            });
+          }
+        });
+      </script>
+    </div>
+  </body>
+</html>
