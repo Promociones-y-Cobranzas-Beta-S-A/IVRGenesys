@@ -21,11 +21,6 @@ DESARROLLO IVR/
 ├── formato/               # Utilidades para exportación de datos
 │   ├── exportar.py
 │   └── exportarjson.py
-│
-├── logs/                  # Logs diarios organizados por fecha
-│   └── 2025-05-12/
-│       └── 2025-05-12.log
-│
 ├── templates/             # Plantillas HTML (en desarrollo)
 │
 ├── app.py                 # Script principal de la API
